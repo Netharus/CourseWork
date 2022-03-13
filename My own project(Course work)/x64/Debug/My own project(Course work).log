@@ -1,0 +1,9 @@
+﻿  mainFile.cpp
+C:\Users\nekro\source\repos\My own project(Course work)\My own project(Course work)\mainFile.cpp(143,22): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\nekro\source\repos\My own project(Course work)\My own project(Course work)\mainFile.cpp(402,12): warning C4244: аргумент: преобразование "time_t" в "unsigned int", возможна потеря данных
+C:\Users\nekro\source\repos\My own project(Course work)\My own project(Course work)\mainFile.cpp(482,6): warning C4101: user_pos: неиспользованная локальная переменная
+C:\Users\nekro\source\repos\My own project(Course work)\My own project(Course work)\mainFile.cpp(532,37): warning C4244: =: преобразование "double" в "int", возможна потеря данных
+C:\Users\nekro\source\repos\My own project(Course work)\My own project(Course work)\mainFile.cpp(296): warning C4715: is_data_valid: значение возвращается не при всех путях выполнения
+C:\Users\nekro\source\repos\My own project(Course work)\My own project(Course work)\mainFile.cpp(369): warning C4715: find_pos: значение возвращается не при всех путях выполнения
+C:\Users\nekro\source\repos\My own project(Course work)\My own project(Course work)\mainFile.cpp(399): warning C4715: login_compare: значение возвращается не при всех путях выполнения
+  My own project(Course work).vcxproj -> C:\Users\nekro\source\repos\My own project(Course work)\x64\Debug\My own project(Course work).exe
