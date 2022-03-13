@@ -30,6 +30,7 @@ const string GUEST = "Guest";
 const string MANAGER = "Manager";
 const string CUSTOMER = "Customer";
 
+bool num_limits(vector<int>arr, vector<account>arr_2);
 void admin_menu(account& user, vector<account>& arr);
 void vector_sort(vector<int>& arr);
 void vector_prep_to_del(vector<int>& arr);
@@ -49,7 +50,6 @@ bool check();
 bool check_str(string& str);
 void del_user(vector <account>& arr, int choice);
 void show_data(vector <account>& arr);
-void update_user_information(vector <account>& arr, account& user);
 int menu(int role);
 void write_file(vector <account>& arr);
 void read_file(vector <account>& arr);
@@ -102,20 +102,8 @@ void core(vector <account>& arr) {
 }
 void del_user(vector <account>& arr,int choice) {
 
-	//int choice;
-	//do {
-	//	cout << " Chose elment that you'd like to delete" << endl;
-	//	show_data(arr);
-	//	cout << "Enter number--";
-	//	cin >> choice;
-	//	if (choice == 1) {
-	//		cout << "You can't delete admin" << endl;
-	//		break;
-	//	}
-	//} while (check() && choice >= arr.size());
 	if (choice != 0) {
 		arr.erase(arr.begin() + choice);
-		cout << "mission complited" << endl;
 	}
 
 }
@@ -126,9 +114,6 @@ void show_data(vector <account>& arr) {
 		cout << i << ")" << "Log:" << arr[i].login << endl;
 	}
 	cout << "\n" << endl;
-}
-void update_user_information(vector <account>& arr,account&user) {
-
 }
 int menu(int role) {
 	int choice;
@@ -369,7 +354,9 @@ int find_pos(vector<account>& arr, string login) {
 }
 void data_change(account &user,int choice,vector<account>&arr,int position,int menu) {
 	user_information_change(user, choice,arr,position,menu);
-	if (choice != 4) { arr[position] = user; }
+	if (menu !=0) {
+		user = arr[position];
+	}
 }
 short validation_error() {
 	short choice;
@@ -418,18 +405,19 @@ string login_creation(string false_login) {
 void user_information_change(account& user, int choice,vector<account>&arr,int position,int menu) {
 	switch (choice) {
 	case 1:cout << "Log:";
-		getline(cin, user.login);
+		getline(cin, arr[position].login);
+		
 		break;
 	case 2:cout << "Password:";
-		cin >> user.password;;
+		cin >> arr[position].password;;
 		break;
 	case 3:cout << "Log:";
-		getline(cin, user.login);
+		getline(cin, arr[position].login);
 		cout << "Password:";
-		cin >> user.password;;
+		cin >> arr[position].password;;
 		break;
 	case 4:del_user(arr, position);
-		if (user.role != 0) {
+		if (user.role != 0&&menu!=0) {
 			
 			guest_creation(user);
 		}
@@ -443,14 +431,16 @@ void user_information_change(account& user, int choice,vector<account>&arr,int p
 		cout<<"Role:"<<endl;
 		do
 		{
-			cin >> user.role;
+			cin >> arr[position].role;
 
 		} while (check() || (choice < 2 && choice > 4));
-		cout << "Now"<<user.login<<"is";
-		show_status(user.role);
+		cout << "Now "<<arr[position].login << " is ";
+		show_status(arr[position].role);
 		break;
 	}
-	
+	if (menu != 0) {
+		cout << "mission complited!" << endl;
+	}
 }
 short information_changing_menu(int role,int menu) {
 	short choice;
@@ -462,7 +452,7 @@ short information_changing_menu(int role,int menu) {
 		} while (check() || (choice < 1 && choice > 5));
 		if (choice == 4) {
 			choice = 5;
-		}
+		}else
 		if (choice==5) {
 			choice = 4;
 		}
@@ -483,20 +473,20 @@ void admin_menu(account& user,vector<account>&arr ) {
 	string user_pos_string;
 	vector<int>num_list;
 	system("cls");
-	/*do
-	{
-		cout << " What would you like to do with user/users\n1)Change data(Login,Password,Role)\n2)Delete" << endl;
-		cin >> choice;
-	} while (check() || (choice < 1 && choice > 2));*/
 	choice=information_changing_menu(user.role, 0);
 	do {
 		num_list.clear();
 		do {
-			show_data(arr);
-			cout << "Enter user or users position separated by commas" << endl;
-			getline(cin, user_pos_string);
-		} while (check_str_for_num(user_pos_string));
-		user_position_data(user_pos_string, num_list);
+			do {
+				show_data(arr);
+				cout << "Enter user or users position separated by commas" << endl;
+				getline(cin, user_pos_string);
+			} while (check_str_for_num(user_pos_string));
+			user_position_data(user_pos_string, num_list);
+			if (user_pos_string.empty()) {
+				num_list.clear();
+			}
+		} while (num_limits(num_list,arr)||user_pos_string.empty());
 		cout << "Are you shure that you'd like to change that user/users data?" << endl;
 		show_user_data_for_admin(num_list, arr);
 		cout << "1--yes\t2--no" << endl;
@@ -509,13 +499,8 @@ void admin_menu(account& user,vector<account>&arr ) {
 	for (int i:num_list) {
 		data_change(user, choice, arr,i,0);
 	}
-	//do {
-	//	show_data(arr);
-	//	cout << "Enter number--";
-	//	cin >> user_pos;
-	//} while (check() && user_pos > arr.size());
-	//data_change(user, information_changing_menu(), arr, user_pos - 1);
 	num_list.clear();
+	cout << "mission complited" << endl;
 }
 void show_role_menu() {
 	cout<<"2--Customer\n3--Manager\n4--Programist" << endl;
@@ -548,10 +533,11 @@ bool check_str_for_num(string str) {
 	}
 	return false;
 }
-
 void show_user_data_for_admin(vector<int>&pos, vector<account>& arr) {
 	for (int i = 0;i < pos.size();i++) {
-		cout << arr[pos[i]].login << "\t" <<arr[pos[i]].role << endl;
+		cout << arr[pos[i]].login << "\t";
+		show_status(arr[pos[i]].role);
+		cout << endl;
 	}
 }
 void vector_sort(vector<int>&arr) {
@@ -567,4 +553,14 @@ void vector_prep_to_del(vector<int>&arr) {
 	for (int i = 0;i < arr.size();i++) {
 		arr[i] -= i;
 	}
+}
+bool num_limits(vector<int>arr,vector<account>arr_2) {
+	for (int i:arr) {
+		if (i >arr_2.size()-1 ) {
+			cout << "We don't have this user position" << endl;
+			return true;
+			
+		}
+	}
+	return false;
 }
